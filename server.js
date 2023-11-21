@@ -1,20 +1,30 @@
-const mongoose = require("mongoose")
-
 const dotenv = require("dotenv");
 dotenv.config({
   path: "/config.env"
 });
+require('./models/db')
+const express = require('express');
 
-const DB = process.env.DATABASE;
-const Port = process.env.PORT;
+const User = require('./models/user')
 
-mongoose.connect('mongodb+srv://getuliosouza8:7JmmF8zhWL3SN878@bedevdb.latpdnf.mongodb.net/?retryWrites=true&w=majority', {
-  useNewUrlParser: true
-});
-mongoose.connection.once('open', function () {
-  console.log('Conection has been made!');
-}).on('error', function (error) {
-  console.log('Error is: ', error);
-});
+const app = express()
 
+app.post('/create-user', async(req, res) => {
+  const user = await User({
+    fullname: 'Getulio Souza',
+    email: 'getuliosouza8@gmail.com',
+    password: '123456'
+  })
+  await user.save()
+  res.json(user)
+})
+
+
+app.get('/', (req, res) => {
+  res.send('hello word')
+})
+
+app.listen(8000, () => {
+  console.log('port is listening')
+})
 
