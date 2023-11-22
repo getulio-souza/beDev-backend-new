@@ -9,10 +9,17 @@ const User = require('./models/user')
 
 const app = express()
 
-app.post('/create-user', async(req, res) => {
+const email = 'getuliosouza18@gmail.com'
+
+app.post('/create-user', async (req, res) => {
+  const isNewUser = await User.isThisEmailInUse(email);
+  if (!isNewUser) return res.json({
+    success: false,
+    message: 'Este e-mail ja esta em uso. Tente fazer login.'
+  })
   const user = await User({
     fullname: 'Getulio Souza',
-    email: 'getuliosouza8@gmail.com',
+    email: email,
     password: '123456'
   })
   await user.save()
